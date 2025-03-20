@@ -40,6 +40,7 @@ make clean  # Clean build files
 ## Plans
 - Make it do some fucking fancy beep boop sounds with PC speaker
 - Try to test it on REAL hardware (altho i DOUBT it will work)
+- Font rendering forrr scores
 
 ## License
 Feel free to use this code however you'd like!
