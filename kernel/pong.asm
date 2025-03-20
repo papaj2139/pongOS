@@ -154,3 +154,4 @@ left_paddle_y:    dw 100
 right_paddle_y:   dw 100
 
 %include "kernel/ball.asm"
+%include "kernel/sound.asm"
