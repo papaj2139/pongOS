@@ -28,6 +28,7 @@ Build commands:
 make        # Build PongOS
 make run    # Build and run in QEMU
 make clean  # Clean build files
+make run-pa # Or you can run with pulseaudio if you dont have alsa
 ```
 
 ## Details
@@ -38,7 +39,6 @@ make clean  # Clean build files
 - Fits in a single floppy disk image
 
 ## Plans
-- Make it do some fucking fancy beep boop sounds with PC speaker
 - Try to test it on REAL hardware (altho i DOUBT it will work)
 - Font rendering forrr scores
 
