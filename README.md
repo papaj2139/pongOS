@@ -37,5 +37,9 @@ make clean  # Clean build files
 - Double buffered graphics 
 - Fits in a single floppy disk image
 
+## Plans
+- Make it do some fucking fancy beep boop sounds with PC speaker
+- Try to test it on REAL hardware (altho i DOUBT it will work)
+
 ## License
 Feel free to use this code however you'd like!
