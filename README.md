@@ -39,7 +39,8 @@ make run-pa # Or you can run with pulseaudio if you dont have alsa
 
 ## Plans
 - Try to test it on REAL hardware (altho i DOUBT it will work)
-- Font rendering forrr scores
+- Shell
+- disk I/O
 
 ## License
 Feel free to use this code however you'd like!
