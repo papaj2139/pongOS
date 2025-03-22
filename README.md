@@ -7,7 +7,6 @@ PongOS boots directly into a two-player Pong game. 320 x 200 VGA
 ## Features
 - Boots directly to Pong game
 - Two player support
-- Smooth paddle movement
 - Double-buffered graphics
 - Runs in 16-bit real mode
 - Tiny footprint (<1.5KB)
