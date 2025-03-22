@@ -37,7 +37,7 @@ update_ball:
     
     ; every what frame update ball?
     inc byte [ball_counter]
-    cmp byte [ball_counter], 18    ;  << if you increase THIS number the ball will be slower
+    cmp byte [ball_counter], 25    ;  << if you increase THIS number the ball will be slower
     jne .done
     mov byte [ball_counter], 0
     
@@ -134,11 +134,24 @@ update_ball:
     jmp .done
 
 .reset_ball:
+    ; updates scores, for the side that missed
+    mov ax, [ball_x]
+    cmp ax, SCREEN_WIDTH/2
+    jg .left_scores
+    
+.right_scores:
+    inc word [right_score]
+    jmp .reset_position
+
+.left_scores:
+    inc word [left_score]
+
+.reset_position:
     ; go back to center
     mov word [ball_x], 160
     mov word [ball_y], 100
     neg word [ball_dx]    ; changes direction
-    jmp .done            ; skip position updates
+    jmp .done             ; skip position updates
 
 .done:
     popa
