@@ -31,7 +31,8 @@ $(BOOT_BIN): $(BOOT_SRC)
 $(KERNEL_BIN): $(KERNEL_SRC)
 	$(ASM) $(ASMFLAGS) $< -o $@
 
-$(OS_IMAGE): $(BOOT_BIN) $(KERNEL_BIN)
+$(OS_IMAGE): $(BOOT_BIN) $(KERNEL_BIN
+	#pad the image
 	dd if=/dev/zero of=$(OS_IMAGE) bs=512 count=2880
 	dd if=$(BOOT_BIN) of=$(OS_IMAGE) conv=notrunc
 	dd if=$(KERNEL_BIN) of=$(OS_IMAGE) seek=1 conv=notrunc,sync
@@ -48,7 +49,7 @@ run: $(OS_IMAGE)
 		-drive format=raw,file=$(OS_IMAGE),if=floppy,index=0,media=disk,cache=none \
 		-audiodev alsa,id=snd0,out.mixing-engine=on \
 		-machine pcspk-audiodev=snd0
-
+#if you dont have alsa this shit for pulseaudio
 run-pa: $(OS_IMAGE)
 	XDG_RUNTIME_DIR=/run/user/$(shell id -u) \
 	qemu-system-i386 \
