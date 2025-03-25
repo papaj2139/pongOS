@@ -16,7 +16,7 @@ PongOS boots directly into a two-player Pong game. 320 x 200 VGA
 - **Left Paddle**: W (up) / S (down)
 - **Right Paddle**: ↑ (up) / ↓ (down)
 - Press Enter at boot screen to start
-- *Shell**: C
+- **Shell**: C
 
 ## Building
 Requires:
