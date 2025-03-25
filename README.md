@@ -41,7 +41,6 @@ make run-pa # Or you can run with pulseaudio if you dont have alsa
 
 ## Plans
 - Try to test it on REAL hardware (altho i DOUBT it will work)
-- Shell
 - disk I/O
 
 ## License
