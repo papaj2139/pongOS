@@ -11,6 +11,7 @@ SCANCODE_W      equ 0x11
 SCANCODE_S      equ 0x1F
 SCANCODE_UP     equ 0x48
 SCANCODE_DOWN   equ 0x50
+SCANCODE_C      equ 0x2E   
 
 pong_main:
     ; initialize paddle positions, center them
@@ -74,7 +75,7 @@ game_loop:
     int 0x16
     jz no_key          ; if nah then fuck you
     
-    mov ah, 0x00       ; get keystroe
+    mov ah, 0x00       ; get keystroke
     int 0x16
     
     cmp al, 'w'        
@@ -85,6 +86,8 @@ game_loop:
     je move_right_up
     cmp ah, 0x50       
     je move_right_down
+    cmp al, 'c'        
+    je enter_shell
     jmp no_key
 
 move_left_up:
@@ -126,6 +129,9 @@ delay_loop:
     
     jmp game_loop
 
+enter_shell:
+    call shell_main    ; jump to shell
+    jmp game_loop      ; when you exit shell go back to game loop
 
 draw_paddle:
     push ax
@@ -476,7 +482,7 @@ draw_done:
 
 draw_scores:
     pusha
-    ; Draw left score
+    ; draw left score
     mov ax, [left_score]
     xor dx, dx
     mov bx, 10
@@ -484,7 +490,7 @@ draw_scores:
     
     push dx          ; save remainder (ones)
     
-    ; Draw tens digit if > 0
+    ; draw tens digit if > 0
     test ax, ax
     jz .left_ones
     mov di, 320*10+45  ; position for tens
@@ -498,7 +504,7 @@ draw_scores:
     mov dl, 0x0F
     call draw_number
     
-    ; Right score
+    ; right score
     mov ax, [right_score]
     xor dx, dx
     mov bx, 10
@@ -521,10 +527,8 @@ draw_scores:
     popa
     ret
 
+section .data
 left_paddle_y:    dw 100
 right_paddle_y:   dw 100
 left_score:       dw 0    
 right_score:      dw 0
-
-%include "kernel/ball.asm"
-%include "kernel/sound.asm"

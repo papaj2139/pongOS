@@ -15,3 +15,6 @@ start:
     jmp pong_main
 
 %include "kernel/pong.asm"
+%include "kernel/ball.asm"
+%include "kernel/sound.asm"
+%include "kernel/shell.asm"

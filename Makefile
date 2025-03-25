@@ -16,8 +16,11 @@ KERNEL_SRC=$(KERNEL_DIR)/kernel_entry.asm
 BOOT_BIN=$(BUILD_DIR)/boot.bin
 KERNEL_BIN=$(BUILD_DIR)/kernel.bin
 OS_IMAGE=$(BUILD_DIR)/pongos.bin
+OS_IMG=$(BUILD_DIR)/pongos.img
 
 all: $(BUILD_DIR) $(OS_IMAGE)
+
+img: $(OS_IMG)
 
 $(BUILD_DIR):
 	mkdir -p $(BUILD_DIR)
@@ -29,9 +32,12 @@ $(KERNEL_BIN): $(KERNEL_SRC)
 	$(ASM) $(ASMFLAGS) $< -o $@
 
 $(OS_IMAGE): $(BOOT_BIN) $(KERNEL_BIN)
-	cat $(BOOT_BIN) $(KERNEL_BIN) > $(OS_IMAGE)
-	#pad the image
-	dd if=/dev/zero bs=1 count=0 seek=1474560 of=$(OS_IMAGE)
+	dd if=/dev/zero of=$(OS_IMAGE) bs=512 count=2880
+	dd if=$(BOOT_BIN) of=$(OS_IMAGE) conv=notrunc
+	dd if=$(KERNEL_BIN) of=$(OS_IMAGE) seek=1 conv=notrunc,sync
+
+$(OS_IMG): $(OS_IMAGE)
+	cp $(OS_IMAGE) $(OS_IMG)
 
 clean:
 	rm -rf $(BUILD_DIR)
@@ -39,15 +45,21 @@ clean:
 run: $(OS_IMAGE)
 	qemu-system-i386 \
 		-display sdl \
-		-drive format=raw,file=$(OS_IMAGE),if=floppy,index=0 \
+		-drive format=raw,file=$(OS_IMAGE),if=floppy,index=0,media=disk,cache=none \
 		-audiodev alsa,id=snd0,out.mixing-engine=on \
 		-machine pcspk-audiodev=snd0
 
-#if you dont have alsa this shit for pulseaudio
 run-pa: $(OS_IMAGE)
 	XDG_RUNTIME_DIR=/run/user/$(shell id -u) \
 	qemu-system-i386 \
 		-display sdl \
-		-drive format=raw,file=$(OS_IMAGE),if=floppy,index=0 \
+		-drive format=raw,file=$(OS_IMAGE),if=floppy,index=0,media=disk \
 		-audiodev pa,id=snd0 \
+		-machine pcspk-audiodev=snd0
+
+run-img: $(OS_IMG)
+	qemu-system-i386 \
+		-display sdl \
+		-drive format=raw,file=$(OS_IMG),if=floppy,index=0,media=disk,cache=none \
+		-audiodev alsa,id=snd0,out.mixing-engine=on \
 		-machine pcspk-audiodev=snd0
