@@ -31,7 +31,7 @@ $(BOOT_BIN): $(BOOT_SRC)
 $(KERNEL_BIN): $(KERNEL_SRC)
 	$(ASM) $(ASMFLAGS) $< -o $@
 
-$(OS_IMAGE): $(BOOT_BIN) $(KERNEL_BIN
+$(OS_IMAGE): $(BOOT_BIN) $(KERNEL_BIN)
 	#pad the image
 	dd if=/dev/zero of=$(OS_IMAGE) bs=512 count=2880
 	dd if=$(BOOT_BIN) of=$(OS_IMAGE) conv=notrunc
