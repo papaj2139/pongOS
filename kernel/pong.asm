@@ -486,44 +486,103 @@ draw_scores:
     mov ax, [left_score]
     xor dx, dx
     mov bx, 10
-    div bx           ; AX = quotient, DX = remainder
-    
-    push dx          ; save remainder (ones)
-    
-    ; draw tens digit if > 0
-    test ax, ax
-    jz .left_ones
-    mov di, 320*10+45  ; position for tens
-    mov al, al        ; quotient is already in AL
-    mov dl, 0x0F      ; color
+    div bx              ; ax = score / 10, dx = ones digit
+    push dx             ; save ones digit
+
+    xor dx, dx
+    ; ax already contains score / 10
+    div bx              ; ax = score / 100 (hundreds) dx = tens digit
+    push dx             ; save tens digit
+
+    ; ax now holds the hundreds digit
+    mov cl, al          ; store hundreds digit temporarily in cl
+    mov ch, dh          ; clear ch, just in case (dh is 0 after div)
+
+    ; check if hundreds digit needs drawing
+    test cl, cl
+    jz .skip_left_hundreds ; if hundreds is 0 skip drawing it
+
+    ; draw hundreds digit
+    mov di, 320*10+38   ; position for hundreds digit (shifted left)
+    mov al, cl          ; get hundreds digit into al
+    mov dl, 0x0F        
     call draw_number
-    
-.left_ones:
-    pop ax           ; get ones digit
-    mov di, 320*10+50
-    mov dl, 0x0F
+    mov ch, 1           ; flag that it drew a higher-order digit
+
+.skip_left_hundreds:
+    ; check if tens digit needs drawing
+    pop ax              ; get tens digit into al
+    mov cl, al          ; store tens digit temporarily in cl
+
+    test ch, ch         ; did it draw the hundreds digit?
+    jnz .draw_left_tens ; if yes draw tens (even if 0)
+    test cl, cl         ; if not check if tens digit itself is > 0
+    jz .skip_left_tens  ; if both hundreds AND tens are 0 skip drawing tens
+
+.draw_left_tens:
+    ; draw tens digit
+    mov di, 320*10+44   ; position for tens digit (shifted left)
+    mov al, cl          ; get tens digit into al
+    mov dl, 0x0F        
     call draw_number
-    
+
+.skip_left_tens:
+    ; always draw ones digit
+    pop ax              ; get ones digit into al
+    mov di, 320*10+50   ; position for ones digit (original position)
+    mov dl, 0x0F        
+    call draw_number
+
     ; right score
     mov ax, [right_score]
     xor dx, dx
     mov bx, 10
     div bx
-    
-    push dx
-    test ax, ax
-    jz .right_ones
-    mov di, 320*10+245
-    mov al, al
+    push dx             ; save ones
+
+    xor dx, dx
+    div bx
+    push dx             ; save tens
+
+    ; ax = hundreds
+    mov cl, al
+    mov ch, dh          ; clear ch (dh=0), reset flag
+
+    ; check hundreds
+    test cl, cl
+    jz .skip_right_hundreds
+
+    ; draw hundreds
+    mov di, 320*10+238  ; position for right hundreds digit (shifted left)
+    mov al, cl
     mov dl, 0x0F
     call draw_number
-    
-.right_ones:
-    pop ax
-    mov di, 320*10+250
+    mov ch, 1           ; flag drawn
+
+.skip_right_hundreds:
+    ; check tens
+    pop ax              ; get tens into al
+    mov cl, al
+
+    test ch, ch         ; hundreds drawn?
+    jnz .draw_right_tens
+    test cl, cl         ; tens > 0?
+    jz .skip_right_tens
+
+.draw_right_tens:
+    ; draw tens
+    mov di, 320*10+244  ; position for right tens digit (shifted left)
+    mov al, cl
     mov dl, 0x0F
     call draw_number
-    
+
+.skip_right_tens:
+    ; draw ones
+    pop ax              ; get ones into al
+    mov di, 320*10+250  ; position for right ones digit (original position)
+    mov dl, 0x0F
+    call draw_number
+
     popa
     ret
 
