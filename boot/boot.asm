@@ -1,5 +1,5 @@
-[BITS 16]               
-[ORG 0x7C00]            
+[BITS 16]
+[ORG 0x7C00]
 
 start:
     ; segments
@@ -22,7 +22,7 @@ start:
     ; show splash screen
     mov si, splash_msg
     call print_string
-    
+
 wait_for_key:
     mov ah, 0x00
     int 0x16
@@ -38,27 +38,27 @@ wait_for_key:
     ; clear screen and set video mode
     mov ax, 0x0013    ; VGA 320x200
     int 0x10
-    
+
     ; save BIOS disk parameters
     push es           ; saves ES
     mov ah, 0x08      ; get parameters
     mov dl, [boot_drive]
     int 0x13
     jc disk_error
-    
+
     ; calculate and save disk parameters
     and cl, 0x3F      ; mask off cylinder bits
     mov byte [sectors_per_track], cl
     mov byte [heads_per_cylinder], dh
     mov byte [cylinders], ch
-    pop es           
+    pop es
 
     ; load kernel from disk
     xor ax, ax        ; sets AX to 0
     mov es, ax        ; ES = 0
     mov bx, 0x1000    ; loads address
     mov ah, 0x02      ; read the sectors
-    mov al, 10        ; how many sectors?
+    mov al, 15        ; how many sectors?
     mov ch, 0         ; cylinder 0
     mov cl, 2         ; starts from sector 2
     mov dh, 0         ; head 0
