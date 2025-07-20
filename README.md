@@ -2,25 +2,25 @@
 A minimalist operating system that does one thing - plays Pong! Written entirely in x86 real mode assembly.
 
 ## About
-PongOS boots directly into a two-player Pong game. 320 x 200 VGA 
+PongOS boots directly into a two-player Pong game. 320x200 VGA, and has a shell for customization features.
 
 ## Features
 - Boots directly to Pong game
-- Two player support
+- Two-player support
 - Double-buffered graphics
 - Runs in 16-bit real mode
-- Tiny footprint (<3KB)
-- A shell
+- Tiny footprint (<4KB)
+- A shell with customization options
 
 ## Controls
 - **Left Paddle**: W (up) / S (down)
 - **Right Paddle**: ↑ (up) / ↓ (down)
-- Press Enter at boot screen to start
-- **Shell**: C
+- **Shell**: C (Press during the game)
+- **Start Game**: Press Enter at the boot screen
 
 ## Building
 Requires:
-- NASM assembler
+- NASM 
 - GNU Make
 - QEMU for testing (optional)
 
