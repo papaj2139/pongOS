@@ -27,6 +27,7 @@ Requires:
 Build commands:
 ```bash
 make        # Build PongOS
+gmake       # For FreeBSD
 make run    # Build and run in QEMU
 make clean  # Clean build files
 make run-pa # Or you can run with pulseaudio if you dont have alsa
