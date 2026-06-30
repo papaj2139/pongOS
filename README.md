@@ -41,7 +41,6 @@ make run-pa # Or you can run with pulseaudio if you dont have alsa
 - Fits in a single floppy disk image
 
 ## Plans
-- Try to test it on REAL hardware (altho i DOUBT it will work)
 - disk I/O (next update, 1.4)
 
 ## License
